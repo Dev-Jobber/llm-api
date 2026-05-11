@@ -70,6 +70,43 @@ async function acquireSlot(
   return slot;
 }
 
+async function acquireSlotForModel(
+  redis: Redis,
+  targetModel: Model
+): Promise<SlotInfo | null> {
+  const targetModelIndex = MODELS.indexOf(targetModel);
+  if (targetModelIndex === -1) return null;
+
+  for (const keyId of KEY_IDS) {
+    const lockK = `${PREFIX}:key:${keyId}:lock`;
+    const failedK = `${PREFIX}:key:${keyId}:m${targetModelIndex}:failed`;
+
+    const pipelineResult = await redis.pipeline()
+      .exists(lockK)
+      .get(failedK)
+      .exec();
+
+    if (!pipelineResult) continue;
+    const isLocked = pipelineResult[0][1] as number;
+    const isFailed = pipelineResult[1][1] as string | null;
+
+    if (isLocked !== 1 && isFailed !== "1") {
+      const roundsK = `${PREFIX}:key:${keyId}:m${targetModelIndex}:rounds`;
+      const used = parseInt((await redis.get(roundsK)) ?? "0", 10);
+
+      if (used < config.roundsPerModel) {
+        await redis.incr(roundsK);
+        return {
+          keyId,
+          model: targetModel,
+          modelIndex: targetModelIndex,
+        };
+      }
+    }
+  }
+  return null;
+}
+
 async function markFailure(
   redis: Redis,
   scripts: LoadedScripts,
@@ -132,19 +169,16 @@ export async function callAi(
   while (tried.size < maxTriesForTargetModel && loops < hardCap) {
     loops++;
     console.log(`[balancer] Loop ${loops}/${hardCap}, tried combos: ${tried.size}/${maxTriesForTargetModel}`);
-    
-    const slot = await acquireSlot(redis, scripts);
+
+    const slot = targetModel
+      ? await acquireSlotForModel(redis, targetModel)
+      : await acquireSlot(redis, scripts);
 
     if (!slot) {
       console.log(`[balancer] No slot available - all keys locked`);
       const err = new Error("All API keys are locked") as Error & { code: string };
       err.code = "ELOCKED";
       throw err;
-    }
-
-    if (targetModel && slot.model !== targetModel) {
-      console.log(`[balancer] Skipping slot - requested model=${targetModel}, got model=${slot.model}`);
-      continue;
     }
 
     const comboKey = `${slot.keyId}:${slot.modelIndex}`;
