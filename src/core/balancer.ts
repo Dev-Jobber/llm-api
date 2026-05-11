@@ -9,6 +9,9 @@ import {
   type Model,
 } from "../config";
 import type { LoadedScripts } from "./scripts";
+import { extractJsonBlocks } from "./json-parser";
+
+const DEFAULT_JSON_SYSTEM_PROMPT = "Return your response as a valid JSON object inside a JSON code block (\\`\\`\\`json).";
 
 const PREFIX = "ai_lb";
 const KEY_IDS = config.apiKeys.map((_, i) => `k${i}`);
@@ -24,6 +27,7 @@ export interface ChatMessage {
 export interface CompletionRequest {
   messages: ChatMessage[];
   model?: Model;
+  return_json?: boolean;
   max_tokens?: number;
   temperature?: number;
   top_p?: number;
@@ -144,6 +148,44 @@ function buildError(
   return err;
 }
 
+function prepareMessages(messages: ChatMessage[], returnJson: boolean): ChatMessage[] {
+  if (!returnJson) return messages;
+
+  const hasSystem = messages.length > 0 && messages[0].role === "system";
+
+  if (hasSystem) {
+    return [
+      {
+        role: "system",
+        content: `${messages[0].content}\n\n${DEFAULT_JSON_SYSTEM_PROMPT}`,
+      },
+      ...messages.slice(1),
+    ];
+  }
+
+  return [
+    { role: "system", content: DEFAULT_JSON_SYSTEM_PROMPT },
+    ...messages,
+  ];
+}
+
+function attachJsonContent(responseData: Record<string, unknown>, returnJson: boolean): void {
+  if (!returnJson) return;
+
+  try {
+    const choices = responseData.choices as Array<Record<string, unknown>>;
+    if (!Array.isArray(choices) || choices.length === 0) return;
+
+    const message = choices[0].message as Record<string, unknown> | undefined;
+    const content = message?.content as string | undefined;
+    if (!content) return;
+
+    responseData.json_content = extractJsonBlocks(content);
+  } catch (e) {
+    responseData.error = String(e);
+  }
+}
+
 export async function callAi(
   redis: Redis,
   scripts: LoadedScripts,
@@ -189,8 +231,10 @@ export async function callAi(
     tried.add(comboKey);
     console.log(`[balancer] Trying combo: ${comboKey} (tried: ${Array.from(tried).join(', ')})`);
 
+    const messages = prepareMessages(body.messages, body.return_json ?? false);
+
     const payload = {
-      messages: body.messages,
+      messages,
       model: slot.model,
       max_tokens: body.max_tokens ?? DEFAULTS.max_tokens,
       temperature: body.temperature ?? DEFAULTS.temperature,
@@ -217,6 +261,7 @@ export async function callAi(
       const responseData = response.data as Record<string, unknown>;
       if (typeof responseData === "object" && responseData !== null) {
         responseData.model = slot.model;
+        attachJsonContent(responseData, body.return_json ?? false);
       }
       return responseData;
     } catch (err) {
