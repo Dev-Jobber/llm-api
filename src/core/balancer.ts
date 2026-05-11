@@ -23,6 +23,7 @@ export interface ChatMessage {
 
 export interface CompletionRequest {
   messages: ChatMessage[];
+  model?: Model;
   max_tokens?: number;
   temperature?: number;
   top_p?: number;
@@ -116,12 +117,21 @@ export async function callAi(
   const hardCap = totalUniqueSlots * 2 + 2;
   let loops = 0;
 
-  console.log(`[balancer] Starting callAi: totalSlots=${totalUniqueSlots}, hardCap=${hardCap}`);
+  const targetModel = body.model;
+  if (targetModel && !MODELS.includes(targetModel)) {
+    const err = new Error(`Invalid model: ${targetModel}`) as Error & { status: number };
+    err.status = 400;
+    throw err;
+  }
+
+  const maxTriesForTargetModel = targetModel ? KEY_IDS.length : totalUniqueSlots;
+
+  console.log(`[balancer] Starting callAi: totalSlots=${totalUniqueSlots}, hardCap=${hardCap}, targetModel=${targetModel ?? "any"}`);
   console.log(`[balancer] Request body: messages=${body.messages.length}, stream=${body.stream ?? DEFAULTS.stream}`);
 
-  while (tried.size < totalUniqueSlots && loops < hardCap) {
+  while (tried.size < maxTriesForTargetModel && loops < hardCap) {
     loops++;
-    console.log(`[balancer] Loop ${loops}/${hardCap}, tried combos: ${tried.size}/${totalUniqueSlots}`);
+    console.log(`[balancer] Loop ${loops}/${hardCap}, tried combos: ${tried.size}/${maxTriesForTargetModel}`);
     
     const slot = await acquireSlot(redis, scripts);
 
@@ -130,6 +140,11 @@ export async function callAi(
       const err = new Error("All API keys are locked") as Error & { code: string };
       err.code = "ELOCKED";
       throw err;
+    }
+
+    if (targetModel && slot.model !== targetModel) {
+      console.log(`[balancer] Skipping slot - requested model=${targetModel}, got model=${slot.model}`);
+      continue;
     }
 
     const comboKey = `${slot.keyId}:${slot.modelIndex}`;
@@ -165,7 +180,11 @@ export async function callAi(
       );
 
       console.log(`[balancer] API call successful: status=${response.status}, keyId=${slot.keyId}, model=${slot.model}`);
-      return response.data;
+      const responseData = response.data as Record<string, unknown>;
+      if (typeof responseData === "object" && responseData !== null) {
+        responseData.model = slot.model;
+      }
+      return responseData;
     } catch (err) {
       const axiosErr = err as AxiosError;
       const status = axiosErr.response?.status ?? 0;

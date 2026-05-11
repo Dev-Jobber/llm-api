@@ -1,8 +1,9 @@
 import type { Request, Response, NextFunction } from "express";
 import type { ChatMessage } from "../core/balancer";
+import { MODELS } from "../config";
 
 export function validateChatRequest(req: Request, res: Response, next: NextFunction): void {
-  const { messages } = req.body as { messages?: unknown };
+  const { messages, model } = req.body as { messages?: unknown; model?: unknown };
 
   if (!Array.isArray(messages) || messages.length === 0) {
     res.status(400).json({ error: "Bad Request", message: "messages must be a non-empty array" });
@@ -21,6 +22,17 @@ export function validateChatRequest(req: Request, res: Response, next: NextFunct
       res.status(400).json({
         error: "Bad Request",
         message: `Invalid role "${msg.role}". Must be system, user, or assistant`,
+      });
+      return;
+    }
+  }
+
+  if (model !== undefined) {
+    if (typeof model !== "string" || !MODELS.includes(model as never)) {
+      res.status(400).json({
+        error: "Bad Request",
+        message: `Invalid model "${model}"`,
+        available_models: MODELS,
       });
       return;
     }
