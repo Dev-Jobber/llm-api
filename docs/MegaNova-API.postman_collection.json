@@ -1,6 +1,6 @@
 {
   "info": {
-    "name": "MegaNova API",
+    "name": "MegaNova Application API",
     "description": "API collection for MegaNova AI Load Balancer. The load balancer ignores the `model` field in request bodies and selects the model via round-robin. All chat requests require `Authorization: Bearer <PROXY_AUTH_KEY>`.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_postman_id": "meganova-api-collection"
