@@ -1,0 +1,398 @@
+{
+  "info": {
+    "name": "MegaNova API",
+    "description": "API collection for MegaNova AI Load Balancer. The load balancer ignores the `model` field in request bodies and selects the model via round-robin. All chat requests require `Authorization: Bearer <PROXY_AUTH_KEY>`.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "meganova-api-collection"
+  },
+  "item": [
+    {
+      "name": "Chat Completions",
+      "item": [
+        {
+          "name": "Create Chat Completion",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{proxy_auth_key}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are a helpful assistant.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Hello, how are you?\"\n    }\n  ],\n  \"max_tokens\": 1024,\n  \"temperature\": 0.7,\n  \"top_p\": 0.9,\n  \"stream\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/chat/completions",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "chat", "completions"]
+            },
+            "description": "Create a chat completion. The load balancer picks the model and API key automatically; the `model` field in the body is ignored."
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{proxy_auth_key}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are a helpful assistant.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Hello, how are you?\"\n    }\n  ]\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/v1/chat/completions",
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "chat", "completions"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"chatcmpl-123\",\n  \"object\": \"chat.completion\",\n  \"created\": 1677652288,\n  \"model\": \"meganova-ai/manta-flash-1.0\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"Hello! I'm doing well, thank you for asking. How can I assist you today?\"\n      },\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 9,\n    \"completion_tokens\": 12,\n    \"total_tokens\": 21\n  }\n}"
+            },
+            {
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{proxy_auth_key}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Hello\"\n    }\n  ]\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/v1/chat/completions",
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "chat", "completions"]
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"service_unavailable\",\n  \"message\": \"All API keys are currently locked. Retry after a few minutes.\"\n}"
+            },
+            {
+              "name": "Bad Request",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{proxy_auth_key}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"messages\": []\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/v1/chat/completions",
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "chat", "completions"]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Bad Request\",\n  \"message\": \"messages must be a non-empty array\"\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200, 400 or 503', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 400, 503]);",
+                  "});",
+                  "pm.test('Response time is acceptable', function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(30000);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Stream Chat Completion",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{proxy_auth_key}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Write a short poem about AI\"\n    }\n  ],\n  \"max_tokens\": 100,\n  \"temperature\": 0.7,\n  \"stream\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/chat/completions",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "chat", "completions"]
+            },
+            "description": "Create a streaming chat completion. The upstream API returns SSE (text/event-stream) which the proxy forwards as-is."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200 or 503', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 503]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Health & Status",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            },
+            "description": "Basic health check. No authentication required."
+          },
+          "response": [
+            {
+              "name": "Healthy Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/health",
+                  "host": ["{{base_url}}"],
+                  "path": ["health"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"ok\",\n  \"uptime\": 3600\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response has ok status', function () {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.status).to.equal('ok');",
+                  "    pm.expect(json.uptime).to.be.a('number');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Detailed Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/status",
+              "host": ["{{base_url}}"],
+              "path": ["status"]
+            },
+            "description": "Full load balancer state: key locks, model rounds, failed flags, and round-robin pointer. No authentication required."
+          },
+          "response": [
+            {
+              "name": "Status Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/status",
+                  "host": ["{{base_url}}"],
+                  "path": ["status"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"roundRobinPointer\": 1,\n  \"totalKeys\": 3,\n  \"totalModels\": 3,\n  \"lockedKeys\": 0,\n  \"freeKeys\": 3,\n  \"keys\": [\n    {\n      \"id\": \"k0\",\n      \"keyId\": \"k0\",\n      \"locked\": false,\n      \"activeModelIdx\": 0,\n      \"models\": [\n        {\n          \"model\": \"meganova-ai/manta-flash-1.0\",\n          \"rounds\": 5,\n          \"failed\": false,\n          \"active\": true\n        },\n        {\n          \"model\": \"meganova-ai/manta-flash-2.0\",\n          \"rounds\": 3,\n          \"failed\": false,\n          \"active\": false\n        },\n        {\n          \"model\": \"meganova-ai/manta-flash-3.0\",\n          \"rounds\": 0,\n          \"failed\": false,\n          \"active\": false\n        }\n      ]\n    },\n    {\n      \"id\": \"k1\",\n      \"keyId\": \"k1\",\n      \"locked\": false,\n      \"activeModelIdx\": 1,\n      \"models\": [\n        {\n          \"model\": \"meganova-ai/manta-flash-1.0\",\n          \"rounds\": 2,\n          \"failed\": false,\n          \"active\": false\n        },\n        {\n          \"model\": \"meganova-ai/manta-flash-2.0\",\n          \"rounds\": 8,\n          \"failed\": false,\n          \"active\": true\n        },\n        {\n          \"model\": \"meganova-ai/manta-flash-3.0\",\n          \"rounds\": 1,\n          \"failed\": false,\n          \"active\": false\n        }\n      ]\n    },\n    {\n      \"id\": \"k2\",\n      \"keyId\": \"k2\",\n      \"locked\": false,\n      \"activeModelIdx\": 2,\n      \"models\": [\n        {\n          \"model\": \"meganova-ai/manta-flash-1.0\",\n          \"rounds\": 0,\n          \"failed\": false,\n          \"active\": false\n        },\n        {\n          \"model\": \"meganova-ai/manta-flash-2.0\",\n          \"rounds\": 0,\n          \"failed\": false,\n          \"active\": false\n        },\n        {\n          \"model\": \"meganova-ai/manta-flash-3.0\",\n          \"rounds\": 12,\n          \"failed\": false,\n          \"active\": true\n        }\n      ]\n    }\n  ]\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response has required fields', function () {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.totalKeys).to.be.a('number');",
+                  "    pm.expect(json.totalModels).to.be.a('number');",
+                  "    pm.expect(json.keys).to.be.an('array');",
+                  "    pm.expect(json.keys).to.have.lengthOf(json.totalKeys);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Load Testing",
+      "item": [
+        {
+          "name": "Simple Load Test",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{proxy_auth_key}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Generate a random number between 1 and 100\"\n    }\n  ],\n  \"max_tokens\": 10,\n  \"temperature\": 0.9\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/chat/completions",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "chat", "completions"]
+            },
+            "description": "Quick request for Postman Runner load testing. Send multiple iterations and check /status to verify round-robin distribution."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200 or 503', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 503]);",
+                  "});",
+                  "pm.test('Response time is acceptable', function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(30000);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const baseUrl = pm.environment.get('base_url');",
+          "const authKey = pm.environment.get('proxy_auth_key');",
+          "",
+          "if (!baseUrl) {",
+          "    console.error('Missing environment variable: base_url');",
+          "}",
+          "if (!authKey) {",
+          "    console.error('Missing environment variable: proxy_auth_key');",
+          "}",
+          "",
+          "console.log('→', pm.request.method, pm.request.url.toString());"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "console.log('←', pm.response.code, pm.response.status, pm.response.responseTime + 'ms');"
+        ]
+      }
+    }
+  ]
+}
