@@ -25,7 +25,7 @@ async function main() {
     console.log(`[server] listening on port ${config.port}`);
   });
 
-  const selfPingScheduler = new SelfPingScheduler("https://llm-api-lnvj.onrender.com/health", 30);
+  const selfPingScheduler = new SelfPingScheduler("https://llm-api-lnvj.onrender.com/health", 10);
   selfPingScheduler.start();
 
   const shutdown = () => {
