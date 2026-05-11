@@ -13,15 +13,11 @@ function parsePositiveInt(raw: string | undefined, fallback: number): number {
 
 export const MODELS = [
   "meganova-ai/manta-flash-1.0",
-  "zai-org/GLM-4.7-Flash",
   "meganova-ai/manta-mini-1.0",
-  "BruhzWater/Sapphira-L3.3-70b-0.1",
   "FallenMerick/MN-Violet-Lotus-12B",
-  "Steelskull/L3.3-MS-Nevoria-70b",
   "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
   "Sao10K/L3-70B-Euryale-v2.1",
   "Sao10K/L3-8B-Stheno-v3.2",
-  "deepseek-ai/DeepSeek-V3-0324-Free",
 ] as const;
 
 export type Model = (typeof MODELS)[number];
