@@ -3,6 +3,7 @@ import express from "express";
 import { config } from "./config";
 import { getRedis, closeRedis } from "./core/redis";
 import { loadScripts } from "./core/scripts";
+import { SelfPingScheduler } from "./core/self-ping";
 import { createChatRouter } from "./routes/chat";
 import { createHealthRouter } from "./routes/health";
 
@@ -24,8 +25,12 @@ async function main() {
     console.log(`[server] listening on port ${config.port}`);
   });
 
+  const selfPingScheduler = new SelfPingScheduler("https://llm-api-lnvj.onrender.com/health", 30);
+  selfPingScheduler.start();
+
   const shutdown = () => {
     console.log("[server] shutting down...");
+    selfPingScheduler.stop();
     server.close(async () => {
       await closeRedis();
       process.exit(0);
