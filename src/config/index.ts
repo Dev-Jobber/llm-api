@@ -12,10 +12,10 @@ function parsePositiveInt(raw: string | undefined, fallback: number): number {
 }
 
 export const MODELS = [
+  "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
   "meganova-ai/manta-flash-1.0",
   "meganova-ai/manta-mini-1.0",
   "FallenMerick/MN-Violet-Lotus-12B",
-  "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
   "Sao10K/L3-70B-Euryale-v2.1",
   "Sao10K/L3-8B-Stheno-v3.2",
 ] as const;
