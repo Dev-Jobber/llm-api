@@ -1,9 +1,9 @@
 import { Router, type Request, type Response } from "express";
 import type Redis from "ioredis";
-import { callAi, type CompletionRequest } from "../core/balancer";
-import type { LoadedScripts } from "../core/scripts";
-import { authenticate } from "../middleware/auth";
-import { validateChatRequest } from "../middleware/validate";
+import { callAi, type CompletionRequest } from "../core/balancer.js";
+import type { LoadedScripts } from "../core/scripts.js";
+import { authenticate } from "../middleware/auth.js";
+import { validateChatRequest } from "../middleware/validate.js";
 
 export function createChatRouter(redis: Redis, scripts: LoadedScripts): Router {
   const router = Router();

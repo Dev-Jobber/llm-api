@@ -1,11 +1,11 @@
 import "dotenv/config";
 import express from "express";
-import { config } from "./config";
-import { getRedis, closeRedis } from "./core/redis";
-import { loadScripts } from "./core/scripts";
-import { SelfPingScheduler } from "./core/self-ping";
-import { createChatRouter } from "./routes/chat";
-import { createHealthRouter } from "./routes/health";
+import { config } from "./config/index.js";
+import { getRedis, closeRedis } from "./core/redis.js";
+import { loadScripts } from "./core/scripts.js";
+import { SelfPingScheduler } from "./core/self-ping.js";
+import { createChatRouter } from "./routes/chat.js";
+import { createHealthRouter } from "./routes/health.js";
 
 async function main() {
   const app = express();

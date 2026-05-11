@@ -7,9 +7,9 @@ import {
   API_CHAT_PATH,
   DEFAULTS,
   type Model,
-} from "../config";
-import type { LoadedScripts } from "./scripts";
-import { extractJsonBlocks } from "./json-parser";
+} from "../config/index.js";
+import type { LoadedScripts } from "./scripts.js";
+import { extractJsonBlocks } from "./json-parser.js";
 
 const DEFAULT_JSON_SYSTEM_PROMPT = "Return your response as a valid JSON object inside a JSON code block (\\`\\`\\`json).";
 

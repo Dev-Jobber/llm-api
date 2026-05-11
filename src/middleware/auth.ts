@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { config } from "../config";
+import { config } from "../config/index.js";
 
 export function authenticate(req: Request, res: Response, next: NextFunction): void {
   const key = req.headers["x-api-key"] ?? req.headers["authorization"];

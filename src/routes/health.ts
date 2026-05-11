@@ -1,6 +1,6 @@
 import { Router, type Request, type Response } from "express";
 import type Redis from "ioredis";
-import { MODELS, config } from "../config";
+import { MODELS, config } from "../config/index.js";
 
 const PREFIX = "ai_lb";
 

@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
-import type { ChatMessage } from "../core/balancer";
-import { MODELS } from "../config";
+import type { ChatMessage } from "../core/balancer.js";
+import { MODELS } from "../config/index.js";
 
 export function validateChatRequest(req: Request, res: Response, next: NextFunction): void {
   const { messages, model, return_json, stream } = req.body as { messages?: unknown; model?: unknown; return_json?: unknown; stream?: unknown };
