@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "MegaNova Application API",
-    "description": "API collection for MegaNova AI Load Balancer. The load balancer ignores the `model` field in request bodies and selects the model via round-robin. All chat requests require `Authorization: Bearer <PROXY_AUTH_KEY>`.",
+    "description": "API collection for MegaNova AI Load Balancer. The load balancer ignores the `model` field in request bodies and selects the model via round-robin.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_postman_id": "meganova-api-collection"
   },
@@ -31,115 +31,21 @@
             },
             "url": {
               "raw": "https://llm-api-lnvj.onrender.com/v1/chat/completions",
-              "host": ["https://llm-api-lnvj.onrender.com"],
-              "path": ["v1", "chat", "completions"]
+              "protocol": "https",
+              "host": [
+                "llm-api-lnvj",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "v1",
+                "chat",
+                "completions"
+              ]
             },
-            "description": "Create a chat completion. The load balancer picks the model and API key automatically; the `model` field in the body is ignored."
+            "description": "Create a chat completion."
           },
-          "response": [
-            {
-              "name": "Success Response",
-              "originalRequest": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer kl5Ik7d8HFVgEpAiTmqRh6hkxjvYFFZ3"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are a helpful assistant.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Hello, how are you?\"\n    }\n  ]\n}"
-                },
-                "url": {
-                  "raw": "https://llm-api-lnvj.onrender.com/v1/chat/completions",
-                  "host": ["https://llm-api-lnvj.onrender.com"],
-                  "path": ["v1", "chat", "completions"]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"id\": \"chatcmpl-123\",\n  \"object\": \"chat.completion\",\n  \"created\": 1677652288,\n  \"model\": \"meganova-ai/manta-flash-1.0\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"Hello! I'm doing well, thank you for asking. How can I assist you today?\"\n      },\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 9,\n    \"completion_tokens\": 12,\n    \"total_tokens\": 21\n  }\n}"
-            },
-            {
-              "name": "Service Unavailable",
-              "originalRequest": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer kl5Ik7d8HFVgEpAiTmqRh6hkxjvYFFZ3"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Hello\"\n    }\n  ]\n}"
-                },
-                "url": {
-                  "raw": "https://llm-api-lnvj.onrender.com/v1/chat/completions",
-                  "host": ["https://llm-api-lnvj.onrender.com"],
-                  "path": ["v1", "chat", "completions"]
-                }
-              },
-              "status": "Service Unavailable",
-              "code": 503,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"service_unavailable\",\n  \"message\": \"All API keys are currently locked. Retry after a few minutes.\"\n}"
-            },
-            {
-              "name": "Bad Request",
-              "originalRequest": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer kl5Ik7d8HFVgEpAiTmqRh6hkxjvYFFZ3"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"messages\": []\n}"
-                },
-                "url": {
-                  "raw": "https://llm-api-lnvj.onrender.com/v1/chat/completions",
-                  "host": ["https://llm-api-lnvj.onrender.com"],
-                  "path": ["v1", "chat", "completions"]
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"Bad Request\",\n  \"message\": \"messages must be a non-empty array\"\n}"
-            }
-          ],
+          "response": [],
           "event": [
             {
               "listen": "test",
@@ -148,9 +54,6 @@
                 "exec": [
                   "pm.test('Status is 200, 400 or 503', function () {",
                   "    pm.expect(pm.response.code).to.be.oneOf([200, 400, 503]);",
-                  "});",
-                  "pm.test('Response time is acceptable', function () {",
-                  "    pm.expect(pm.response.responseTime).to.be.below(30000);",
                   "});"
                 ]
               }
@@ -179,24 +82,20 @@
             },
             "url": {
               "raw": "https://llm-api-lnvj.onrender.com/v1/chat/completions",
-              "host": ["https://llm-api-lnvj.onrender.com"],
-              "path": ["v1", "chat", "completions"]
-            },
-            "description": "Create a streaming chat completion. The upstream API returns SSE (text/event-stream) which the proxy forwards as-is."
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status is 200 or 503', function () {",
-                  "    pm.expect(pm.response.code).to.be.oneOf([200, 503]);",
-                  "});"
-                ]
-              }
+              "protocol": "https",
+              "host": [
+                "llm-api-lnvj",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "v1",
+                "chat",
+                "completions"
+              ]
             }
-          ]
+          },
+          "response": []
         },
         {
           "name": "Create Chat Completion (JSON Response)",
@@ -216,85 +115,24 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Return a JSON object with fields: name (string), age (number), city (string)\"\n    }\n  ],\n  \"max_tokens\": 200,\n  \"return_json\": true\n}"
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Return a JSON object with fields: name, age, city\"\n    }\n  ],\n  \"max_tokens\": 200,\n  \"return_json\": true\n}"
             },
             "url": {
               "raw": "https://llm-api-lnvj.onrender.com/v1/chat/completions",
-              "host": ["https://llm-api-lnvj.onrender.com"],
-              "path": ["v1", "chat", "completions"]
-            },
-            "description": "Create a chat completion with JSON response. The model returns JSON which is extracted into the json_content field."
-          },
-          "response": [
-            {
-              "name": "JSON Response",
-              "originalRequest": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer kl5Ik7d8HFVgEpAiTmqRh6hkxjvYFFZ3"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Return a JSON object with fields: name (string), age (number), city (string)\"\n    }\n  ],\n  \"return_json\": true\n}"
-                },
-                "url": {
-                  "raw": "https://llm-api-lnvj.onrender.com/v1/chat/completions",
-                  "host": ["https://llm-api-lnvj.onrender.com"],
-                  "path": ["v1", "chat", "completions"]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
+              "protocol": "https",
+              "host": [
+                "llm-api-lnvj",
+                "onrender",
+                "com"
               ],
-              "body": "{\n  \"id\": \"chatcmpl-789\",\n  \"object\": \"chat.completion\",\n  \"created\": 1677652288,\n  \"model\": \"meganova-ai/manta-flash-1.0\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"```json\\n{\\n  \\\"name\\\": \\\"John\\\",\\n  \\\"age\\\": 30,\\n  \\\"city\\\": \\\"New York\\\"\\n}\\n```\"\n      },\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 15,\n    \"completion_tokens\": 25,\n    \"total_tokens\": 40\n  },\n  \"json_content\": {\n    \"name\": \"John\",\n    \"age\": 30,\n    \"city\": \"New York\"\n  }\n}"
-            }
-          ]
-        },
-        {
-          "name": "Streaming Response",
-          "originalRequest": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer kl5Ik7d8HFVgEpAiTmqRh6hkxjvYFFZ3"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Write a short poem about AI\"\n    }\n  ],\n  \"max_tokens\": 100,\n  \"stream\": true\n}"
-            },
-            "url": {
-              "raw": "https://llm-api-lnvj.onrender.com/v1/chat/completions",
-              "host": ["https://llm-api-lnvj.onrender.com"],
-              "path": ["v1", "chat", "completions"]
+              "path": [
+                "v1",
+                "chat",
+                "completions"
+              ]
             }
           },
-          "status": "OK",
-          "code": 200,
-          "header": [
-            {
-              "key": "Content-Type",
-              "value": "text/event-stream"
-            }
-          ],
-          "body": "data: {\"id\":\"chatcmpl-123\",\"object\":\"chat.completion.chunk\",\"created\":1677652288,\"model\":\"meganova-ai/manta-flash-1.0\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"In\"},\"finish_reason\":null}]}\n\ndata: {\"id\":\"chatcmpl-123\",\"object\":\"chat.completion.chunk\",\"created\":1677652288,\"model\":\"meganova-ai/manta-flash-1.0\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\" the\"},\"finish_reason\":null}]}\n\ndata: {\"id\":\"chatcmpl-123\",\"object\":\"chat.completion.chunk\",\"created\":1677652288,\"model\":\"meganova-ai/manta-flash-1.0\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\" digital\"},\"finish_reason\":null}]}\n\ndata: [DONE]"
+          "response": []
         }
       ]
     },
@@ -308,52 +146,18 @@
             "header": [],
             "url": {
               "raw": "https://llm-api-lnvj.onrender.com/health",
-              "host": ["https://llm-api-lnvj.onrender.com"],
-              "path": ["health"]
-            },
-            "description": "Basic health check. No authentication required."
-          },
-          "response": [
-            {
-              "name": "Healthy Response",
-              "originalRequest": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "https://llm-api-lnvj.onrender.com/health",
-                  "host": ["https://llm-api-lnvj.onrender.com"],
-                  "path": ["health"]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
+              "protocol": "https",
+              "host": [
+                "llm-api-lnvj",
+                "onrender",
+                "com"
               ],
-              "body": "{\n  \"status\": \"ok\",\n  \"uptime\": 3600\n}"
+              "path": [
+                "health"
+              ]
             }
-          ],
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status is 200', function () {",
-                  "    pm.response.to.have.status(200);",
-                  "});",
-                  "pm.test('Response has ok status', function () {",
-                  "    const json = pm.response.json();",
-                  "    pm.expect(json.status).to.equal('ok');",
-                  "    pm.expect(json.uptime).to.be.a('number');",
-                  "});"
-                ]
-              }
-            }
-          ]
+          },
+          "response": []
         },
         {
           "name": "Detailed Status",
@@ -362,54 +166,18 @@
             "header": [],
             "url": {
               "raw": "https://llm-api-lnvj.onrender.com/status",
-              "host": ["https://llm-api-lnvj.onrender.com"],
-              "path": ["status"]
-            },
-            "description": "Full load balancer state: key locks, model rounds, failed flags, and round-robin pointer. No authentication required."
-          },
-          "response": [
-            {
-              "name": "Status Response",
-              "originalRequest": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "https://llm-api-lnvj.onrender.com/status",
-                  "host": ["https://llm-api-lnvj.onrender.com"],
-                  "path": ["status"]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
+              "protocol": "https",
+              "host": [
+                "llm-api-lnvj",
+                "onrender",
+                "com"
               ],
-              "body": "{\n  \"roundRobinPointer\": 1,\n  \"totalKeys\": 3,\n  \"totalModels\": 3,\n  \"lockedKeys\": 0,\n  \"freeKeys\": 3,\n  \"keys\": [\n    {\n      \"id\": \"k0\",\n      \"keyId\": \"k0\",\n      \"locked\": false,\n      \"activeModelIdx\": 0,\n      \"models\": [\n        {\n          \"model\": \"meganova-ai/manta-flash-1.0\",\n          \"rounds\": 5,\n          \"failed\": false,\n          \"active\": true\n        },\n        {\n          \"model\": \"meganova-ai/manta-flash-2.0\",\n          \"rounds\": 3,\n          \"failed\": false,\n          \"active\": false\n        },\n        {\n          \"model\": \"meganova-ai/manta-flash-3.0\",\n          \"rounds\": 0,\n          \"failed\": false,\n          \"active\": false\n        }\n      ]\n    },\n    {\n      \"id\": \"k1\",\n      \"keyId\": \"k1\",\n      \"locked\": false,\n      \"activeModelIdx\": 1,\n      \"models\": [\n        {\n          \"model\": \"meganova-ai/manta-flash-1.0\",\n          \"rounds\": 2,\n          \"failed\": false,\n          \"active\": false\n        },\n        {\n          \"model\": \"meganova-ai/manta-flash-2.0\",\n          \"rounds\": 8,\n          \"failed\": false,\n          \"active\": true\n        },\n        {\n          \"model\": \"meganova-ai/manta-flash-3.0\",\n          \"rounds\": 1,\n          \"failed\": false,\n          \"active\": false\n        }\n      ]\n    },\n    {\n      \"id\": \"k2\",\n      \"keyId\": \"k2\",\n      \"locked\": false,\n      \"activeModelIdx\": 2,\n      \"models\": [\n        {\n          \"model\": \"meganova-ai/manta-flash-1.0\",\n          \"rounds\": 0,\n          \"failed\": false,\n          \"active\": false\n        },\n        {\n          \"model\": \"meganova-ai/manta-flash-2.0\",\n          \"rounds\": 0,\n          \"failed\": false,\n          \"active\": false\n        },\n        {\n          \"model\": \"meganova-ai/manta-flash-3.0\",\n          \"rounds\": 12,\n          \"failed\": false,\n          \"active\": true\n        }\n      ]\n    }\n  ]\n}"
+              "path": [
+                "status"
+              ]
             }
-          ],
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status is 200', function () {",
-                  "    pm.response.to.have.status(200);",
-                  "});",
-                  "pm.test('Response has required fields', function () {",
-                  "    const json = pm.response.json();",
-                  "    pm.expect(json.totalKeys).to.be.a('number');",
-                  "    pm.expect(json.totalModels).to.be.a('number');",
-                  "    pm.expect(json.keys).to.be.an('array');",
-                  "    pm.expect(json.keys).to.have.lengthOf(json.totalKeys);",
-                  "});"
-                ]
-              }
-            }
-          ]
+          },
+          "response": []
         }
       ]
     },
@@ -438,61 +206,20 @@
             },
             "url": {
               "raw": "https://llm-api-lnvj.onrender.com/v1/chat/completions",
-              "host": ["https://llm-api-lnvj.onrender.com"],
-              "path": ["v1", "chat", "completions"]
-            },
-            "description": "Quick request for Postman Runner load testing. Send multiple iterations and check /status to verify round-robin distribution."
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status is 200 or 503', function () {",
-                  "    pm.expect(pm.response.code).to.be.oneOf([200, 503]);",
-                  "});",
-                  "pm.test('Response time is acceptable', function () {",
-                  "    pm.expect(pm.response.responseTime).to.be.below(30000);",
-                  "});"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "Success Response",
-          "originalRequest": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer kl5Ik7d8HFVgEpAiTmqRh6hkxjvYFFZ3"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Generate a random number between 1 and 100\"\n    }\n  ],\n  \"max_tokens\": 10,\n  \"temperature\": 0.9\n}"
-            },
-            "url": {
-              "raw": "https://llm-api-lnvj.onrender.com/v1/chat/completions",
-              "host": ["https://llm-api-lnvj.onrender.com"],
-              "path": ["v1", "chat", "completions"]
+              "protocol": "https",
+              "host": [
+                "llm-api-lnvj",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "v1",
+                "chat",
+                "completions"
+              ]
             }
           },
-          "status": "OK",
-          "code": 200,
-          "header": [
-            {
-              "key": "Content-Type",
-              "value": "application/json"
-            }
-          ],
-          "body": "{\n  \"id\": \"chatcmpl-456\",\n  \"object\": \"chat.completion\",\n  \"created\": 1677652288,\n  \"model\": \"meganova-ai/manta-flash-1.0\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"42\"\n      },\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 8,\n    \"completion_tokens\": 2,\n    \"total_tokens\": 10\n  }\n}"
+          "response": []
         }
       ]
     }
