@@ -21,7 +21,7 @@
               },
               {
                 "key": "Authorization",
-                "value": "Bearer {{proxy_auth_key}}",
+                "value": "Bearer kl5Ik7d8HFVgEpAiTmqRh6hkxjvYFFZ3",
                 "type": "text"
               }
             ],
@@ -30,8 +30,8 @@
               "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are a helpful assistant.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Hello, how are you?\"\n    }\n  ],\n  \"max_tokens\": 1024,\n  \"temperature\": 0.7,\n  \"top_p\": 0.9,\n  \"stream\": false\n}"
             },
             "url": {
-              "raw": "{{base_url}}/v1/chat/completions",
-              "host": ["{{base_url}}"],
+              "raw": "https://llm-api-lnvj.onrender.com/v1/chat/completions",
+              "host": ["https://llm-api-lnvj.onrender.com"],
               "path": ["v1", "chat", "completions"]
             },
             "description": "Create a chat completion. The load balancer picks the model and API key automatically; the `model` field in the body is ignored."
@@ -48,7 +48,7 @@
                   },
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{proxy_auth_key}}"
+                    "value": "Bearer kl5Ik7d8HFVgEpAiTmqRh6hkxjvYFFZ3"
                   }
                 ],
                 "body": {
@@ -56,8 +56,8 @@
                   "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are a helpful assistant.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Hello, how are you?\"\n    }\n  ]\n}"
                 },
                 "url": {
-                  "raw": "{{base_url}}/v1/chat/completions",
-                  "host": ["{{base_url}}"],
+                  "raw": "https://llm-api-lnvj.onrender.com/v1/chat/completions",
+                  "host": ["https://llm-api-lnvj.onrender.com"],
                   "path": ["v1", "chat", "completions"]
                 }
               },
@@ -82,7 +82,7 @@
                   },
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{proxy_auth_key}}"
+                    "value": "Bearer kl5Ik7d8HFVgEpAiTmqRh6hkxjvYFFZ3"
                   }
                 ],
                 "body": {
@@ -90,8 +90,8 @@
                   "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Hello\"\n    }\n  ]\n}"
                 },
                 "url": {
-                  "raw": "{{base_url}}/v1/chat/completions",
-                  "host": ["{{base_url}}"],
+                  "raw": "https://llm-api-lnvj.onrender.com/v1/chat/completions",
+                  "host": ["https://llm-api-lnvj.onrender.com"],
                   "path": ["v1", "chat", "completions"]
                 }
               },
@@ -116,7 +116,7 @@
                   },
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{proxy_auth_key}}"
+                    "value": "Bearer kl5Ik7d8HFVgEpAiTmqRh6hkxjvYFFZ3"
                   }
                 ],
                 "body": {
@@ -124,8 +124,8 @@
                   "raw": "{\n  \"messages\": []\n}"
                 },
                 "url": {
-                  "raw": "{{base_url}}/v1/chat/completions",
-                  "host": ["{{base_url}}"],
+                  "raw": "https://llm-api-lnvj.onrender.com/v1/chat/completions",
+                  "host": ["https://llm-api-lnvj.onrender.com"],
                   "path": ["v1", "chat", "completions"]
                 }
               },
@@ -169,7 +169,7 @@
               },
               {
                 "key": "Authorization",
-                "value": "Bearer {{proxy_auth_key}}",
+                "value": "Bearer kl5Ik7d8HFVgEpAiTmqRh6hkxjvYFFZ3",
                 "type": "text"
               }
             ],
@@ -178,8 +178,8 @@
               "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Write a short poem about AI\"\n    }\n  ],\n  \"max_tokens\": 100,\n  \"temperature\": 0.7,\n  \"stream\": true\n}"
             },
             "url": {
-              "raw": "{{base_url}}/v1/chat/completions",
-              "host": ["{{base_url}}"],
+              "raw": "https://llm-api-lnvj.onrender.com/v1/chat/completions",
+              "host": ["https://llm-api-lnvj.onrender.com"],
               "path": ["v1", "chat", "completions"]
             },
             "description": "Create a streaming chat completion. The upstream API returns SSE (text/event-stream) which the proxy forwards as-is."
@@ -197,6 +197,104 @@
               }
             }
           ]
+        },
+        {
+          "name": "Create Chat Completion (JSON Response)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer kl5Ik7d8HFVgEpAiTmqRh6hkxjvYFFZ3",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Return a JSON object with fields: name (string), age (number), city (string)\"\n    }\n  ],\n  \"max_tokens\": 200,\n  \"return_json\": true\n}"
+            },
+            "url": {
+              "raw": "https://llm-api-lnvj.onrender.com/v1/chat/completions",
+              "host": ["https://llm-api-lnvj.onrender.com"],
+              "path": ["v1", "chat", "completions"]
+            },
+            "description": "Create a chat completion with JSON response. The model returns JSON which is extracted into the json_content field."
+          },
+          "response": [
+            {
+              "name": "JSON Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer kl5Ik7d8HFVgEpAiTmqRh6hkxjvYFFZ3"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Return a JSON object with fields: name (string), age (number), city (string)\"\n    }\n  ],\n  \"return_json\": true\n}"
+                },
+                "url": {
+                  "raw": "https://llm-api-lnvj.onrender.com/v1/chat/completions",
+                  "host": ["https://llm-api-lnvj.onrender.com"],
+                  "path": ["v1", "chat", "completions"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"chatcmpl-789\",\n  \"object\": \"chat.completion\",\n  \"created\": 1677652288,\n  \"model\": \"meganova-ai/manta-flash-1.0\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"```json\\n{\\n  \\\"name\\\": \\\"John\\\",\\n  \\\"age\\\": 30,\\n  \\\"city\\\": \\\"New York\\\"\\n}\\n```\"\n      },\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 15,\n    \"completion_tokens\": 25,\n    \"total_tokens\": 40\n  },\n  \"json_content\": {\n    \"name\": \"John\",\n    \"age\": 30,\n    \"city\": \"New York\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Streaming Response",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer kl5Ik7d8HFVgEpAiTmqRh6hkxjvYFFZ3"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Write a short poem about AI\"\n    }\n  ],\n  \"max_tokens\": 100,\n  \"stream\": true\n}"
+            },
+            "url": {
+              "raw": "https://llm-api-lnvj.onrender.com/v1/chat/completions",
+              "host": ["https://llm-api-lnvj.onrender.com"],
+              "path": ["v1", "chat", "completions"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/event-stream"
+            }
+          ],
+          "body": "data: {\"id\":\"chatcmpl-123\",\"object\":\"chat.completion.chunk\",\"created\":1677652288,\"model\":\"meganova-ai/manta-flash-1.0\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"In\"},\"finish_reason\":null}]}\n\ndata: {\"id\":\"chatcmpl-123\",\"object\":\"chat.completion.chunk\",\"created\":1677652288,\"model\":\"meganova-ai/manta-flash-1.0\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\" the\"},\"finish_reason\":null}]}\n\ndata: {\"id\":\"chatcmpl-123\",\"object\":\"chat.completion.chunk\",\"created\":1677652288,\"model\":\"meganova-ai/manta-flash-1.0\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\" digital\"},\"finish_reason\":null}]}\n\ndata: [DONE]"
         }
       ]
     },
@@ -209,8 +307,8 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/health",
-              "host": ["{{base_url}}"],
+              "raw": "https://llm-api-lnvj.onrender.com/health",
+              "host": ["https://llm-api-lnvj.onrender.com"],
               "path": ["health"]
             },
             "description": "Basic health check. No authentication required."
@@ -222,8 +320,8 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{base_url}}/health",
-                  "host": ["{{base_url}}"],
+                  "raw": "https://llm-api-lnvj.onrender.com/health",
+                  "host": ["https://llm-api-lnvj.onrender.com"],
                   "path": ["health"]
                 }
               },
@@ -263,8 +361,8 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/status",
-              "host": ["{{base_url}}"],
+              "raw": "https://llm-api-lnvj.onrender.com/status",
+              "host": ["https://llm-api-lnvj.onrender.com"],
               "path": ["status"]
             },
             "description": "Full load balancer state: key locks, model rounds, failed flags, and round-robin pointer. No authentication required."
@@ -276,8 +374,8 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{base_url}}/status",
-                  "host": ["{{base_url}}"],
+                  "raw": "https://llm-api-lnvj.onrender.com/status",
+                  "host": ["https://llm-api-lnvj.onrender.com"],
                   "path": ["status"]
                 }
               },
@@ -330,7 +428,7 @@
               },
               {
                 "key": "Authorization",
-                "value": "Bearer {{proxy_auth_key}}",
+                "value": "Bearer kl5Ik7d8HFVgEpAiTmqRh6hkxjvYFFZ3",
                 "type": "text"
               }
             ],
@@ -339,8 +437,8 @@
               "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Generate a random number between 1 and 100\"\n    }\n  ],\n  \"max_tokens\": 10,\n  \"temperature\": 0.9\n}"
             },
             "url": {
-              "raw": "{{base_url}}/v1/chat/completions",
-              "host": ["{{base_url}}"],
+              "raw": "https://llm-api-lnvj.onrender.com/v1/chat/completions",
+              "host": ["https://llm-api-lnvj.onrender.com"],
               "path": ["v1", "chat", "completions"]
             },
             "description": "Quick request for Postman Runner load testing. Send multiple iterations and check /status to verify round-robin distribution."
@@ -361,6 +459,40 @@
               }
             }
           ]
+        },
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer kl5Ik7d8HFVgEpAiTmqRh6hkxjvYFFZ3"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Generate a random number between 1 and 100\"\n    }\n  ],\n  \"max_tokens\": 10,\n  \"temperature\": 0.9\n}"
+            },
+            "url": {
+              "raw": "https://llm-api-lnvj.onrender.com/v1/chat/completions",
+              "host": ["https://llm-api-lnvj.onrender.com"],
+              "path": ["v1", "chat", "completions"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"id\": \"chatcmpl-456\",\n  \"object\": \"chat.completion\",\n  \"created\": 1677652288,\n  \"model\": \"meganova-ai/manta-flash-1.0\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"42\"\n      },\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 8,\n    \"completion_tokens\": 2,\n    \"total_tokens\": 10\n  }\n}"
         }
       ]
     }
@@ -371,16 +503,6 @@
       "script": {
         "type": "text/javascript",
         "exec": [
-          "const baseUrl = pm.environment.get('base_url');",
-          "const authKey = pm.environment.get('proxy_auth_key');",
-          "",
-          "if (!baseUrl) {",
-          "    console.error('Missing environment variable: base_url');",
-          "}",
-          "if (!authKey) {",
-          "    console.error('Missing environment variable: proxy_auth_key');",
-          "}",
-          "",
           "console.log('→', pm.request.method, pm.request.url.toString());"
         ]
       }
