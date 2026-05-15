@@ -260,7 +260,6 @@ export async function callAi(
       console.log(`[balancer] API call successful: status=${response.status}, keyId=${slot.keyId}, model=${slot.model}`);
       const responseData = response.data as Record<string, unknown>;
       if (typeof responseData === "object" && responseData !== null) {
-        responseData.model = slot.model;
         attachJsonContent(responseData, body.return_json ?? false);
       }
       return responseData;
