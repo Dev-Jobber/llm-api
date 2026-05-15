@@ -28,7 +28,9 @@ export function createChatRouter(redis: Redis, scripts: LoadedScripts): Router {
         
         const duration = Date.now() - startTime;
         console.log(`[chat] Response ${requestId}: success in ${duration}ms`);
-        res.json(data);
+        const { model, ...filtered } = data as Record<string, unknown>;
+        res.json(filtered);
+
       } catch (err) {
         const e = err as Error & { status?: number; upstream?: unknown; code?: string };
         const duration = Date.now() - startTime;
